@@ -1,8 +1,7 @@
-
-################################################################################
+###################################################
 # example fibonacci number code;
 # you do not have to modify this code in any way
-################################################################################
+#########################################################
 
 
 def fibs(n):
@@ -46,10 +45,10 @@ def fib(n):
     return f2
 
 
-################################################################################
+########################################
 # fibonacci number code using generators;
 # you will need to implement the functions below
-################################################################################
+# ####################################################
 
 
 class Fib:
@@ -60,16 +59,56 @@ class Fib:
     >>> list(Fib(5))
     [1, 1, 2, 3, 5]
     '''
+    def __init__(self, n):
+        self.n = n
+
+    def __iter__(self):
+        return FibIter(self.n)
 
 
 class FibIter:
     '''
     This is the iterator helper class for the Fib class.
     '''
+    def __init__(self, n):
+        self.n = n
+        self.i = 0
+        self.fibs = []
+
+    def __next__(self):
+        if self.i == 0:
+            self.fibs.append(1)
+            self.i += 1
+            return 1
+        elif self.n == 1:
+            raise StopIteration
+        if self.i == 1:
+            self.fibs.append(1)
+            self.i += 1
+            return 1
+        print("i= ", self.i, self.fibs)
+        if len(self.fibs) < self.n:
+            self.fn = (self.fibs[-1] + self.fibs[-2])
+            self.fibs.append(self.fn)
+            self.i += 1
+            return self.fn
+        else:
+            raise StopIteration
 
 
 def fib_yield(n=None):
     '''
-    This function returns a generator that computes the first n fibonacci numbers.
+    This function returns a generator that computes
+    the first n fibonacci numbers.
     If n is None, then the generator is infinite.
     '''
+    fibs = []
+    if n is None:
+        n = 0
+    fibs.append(1)
+    if n == 1 or n == 0:
+        yield fibs
+    fibs.append(1)
+    while len(fibs) < n or n == 0:
+        fibs.append(fibs[-1]+fibs[-2])
+        yield fibs
